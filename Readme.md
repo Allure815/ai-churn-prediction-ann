@@ -1,11 +1,18 @@
+**🔥 Customer Churn Prediction with SHAP Explainability**
 
-# Customer Churn Prediction
+An ANN-based churn predictor that doesn't just say "this customer will leave" — it shows exactly which factors drove that prediction, using SHAP.
 
-## 📌 Overview
-This project predicts whether a customer is likely to leave a service.  
-It also explains *why* the model made a prediction using clear and simple visual explanations.
+Built end-to-end: data cleaning → preprocessing pipeline → neural network training → explainability layer → interactive Streamlit app.
 
----
+
+**💡 Why This Matters**
+
+Churn prediction alone isn't enough for a business to act on — a retention team needs to know why a customer is flagged as high-risk to decide what to do about it. This project pairs a trained neural network with SHAP (SHapley Additive exPlanations) so every prediction comes with a transparent, per-feature breakdown, the same interpretability approach used in production risk and retention models.
+
+
+Input: customer profile (contract type, tenure, charges, services, etc.) → Output: churn probability + a visual breakdown of which features pushed the prediction toward "will churn" or "will stay."
+
+
 
 ## 🚨 Problem
 Customer churn directly impacts business revenue.  
@@ -23,6 +30,23 @@ Most models only give predictions, but businesses also need **clear reasons** be
 
 ---
 
+
+**⚙️ Key Features**
+
+
+🧠 Feedforward neural network (Keras Dense 32 → 16 → 1) trained on the IBM Telco Customer Churn dataset
+
+🔍 SHAP-based feature importance for every individual prediction, not just global model stats
+
+📊 Churn probability score alongside the binary decision
+
+🎛️ Full customer-profile input form (19 features: demographics, services, contract, billing) via Streamlit
+
+🧹 Proper preprocessing pipeline (StandardScaler + OneHotEncoder via ColumnTransformer), saved and reused at inference time so training and serving stay consistent
+
+---
+
+
 ## ⚙️ What This Project Does
 - Takes customer details as input  
 - Predicts whether the customer will churn  
@@ -31,20 +55,35 @@ Most models only give predictions, but businesses also need **clear reasons** be
 
 ---
 
-## 🧠 How It Works (High Level)
-- A trained Machine Learning model predicts churn  
-- SHAP is used to explain model predictions  
-- Results are displayed using an interactive Streamlit UI  
+**🧠 How It Works**
+
+-User fills in a customer's profile (tenure, contract type, services, billing info, etc.)
+
+-Input is transformed through the same ColumnTransformer pipeline used during training
+
+-The trained ANN outputs a churn probability
+
+-SHAP's KernelExplainer computes per-feature contributions to that specific prediction
+
+-Results are displayed as a probability score, a churn/no-churn decision, and a SHAP bar chart of the top influencing factors
+
 
 ---
 
-## 🛠️ Tech Stack
-- Python  
-- Scikit-learn  
-- Streamlit  
-- SHAP  
+**🛠️ Tech Stack**
+
+Modeling: TensorFlow / Keras (ANN)
+
+Preprocessing: scikit-learn (ColumnTransformer, StandardScaler, OneHotEncoder)
+
+Explainability: SHAP
+
+Interface: Streamlit
+
+Dataset: IBM Telco Customer Churn (public)
 
 ---
+
 
 ## 📊 Use Cases
 - Customer retention strategy  
@@ -54,13 +93,38 @@ Most models only give predictions, but businesses also need **clear reasons** be
 
 ---
 
-## 📈 Future Improvements
-- Add real-time data integration  
-- Improve model accuracy with advanced algorithms  
-- Deploy with cloud scalability  
 
----
 
-## ✅ Status
-✔️ Working prototype with prediction + explainability  
+**▶️ Run It Locally**
+
+bash# Clone
+git clone https://github.com/Allure815/ai-churn-prediction-ann.git
+cd ai-churn-prediction-ann
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Launch the app
+streamlit run app.py
+
+Fill in a customer profile and click Predict Churn to see the probability and SHAP explanation.
+
+----
+
+
+**🔭 What's Next**
+
+
+Wire up the SHAP explainer to use the pre-computed real-data background (shap_background.joblib) instead of a zero baseline, for more accurate feature attributions
+Report test-set accuracy, precision/recall, and ROC-AUC alongside training accuracy for a complete performance picture
+Experiment with additional epochs / architecture tuning to push past the current ~80% training accuracy
+Add a batch-prediction mode (upload a CSV of customers, get churn scores for all of them at once)
+
+
+
+**👤 Author**
+
+Heeral — https://github.com/Allure815
+
+
   
